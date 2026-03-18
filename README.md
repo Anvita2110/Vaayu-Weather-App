@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Vayu (Frontend)
 
-## Getting Started
+Vayu is a Next.js (App Router) frontend for searching real-time weather and air-quality data.
 
-First, run the development server:
+## Tech stack
+
+- **Framework**: Next.js (App Router)
+- **Runtime / package manager**: Bun
+- **Data fetching**: SWR + Axios
+- **Styling**: Tailwind CSS (utility classes)
+
+## Requirements
+
+- **Bun** installed (`bun --version`)
+- A running backend that exposes the weather API used by this frontend
+
+## Environment variables
+
+Create `.env.local` in the project root:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+NEXT_PUBLIC_BACKEND_URL="http://localhost:YOUR_BACKEND_PORT"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Notes:
+- The variable is prefixed with `NEXT_PUBLIC_` because it’s used in the browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Run locally
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Install dependencies:
 
-## Learn More
+```bash
+bun install
+```
 
-To learn more about Next.js, take a look at the following resources:
+Start the dev server:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+bun run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Open `http://localhost:3000`.
 
-## Deploy on Vercel
+## Scripts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+bun run dev     # start dev server
+bun run build   # production build
+bun run start   # start production server
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Routes
+
+- **`/`**: landing page
+- **`/home`**: search UI + popular cities + recent searches
+- **`/weather?city=...`**: weather + air quality for a city
+
+## Production / deployment
+
+Build the app:
+
+```bash
+bun run build
+```
+
+Deploy anywhere that supports Next.js. If deploying to Vercel, set the same `NEXT_PUBLIC_BACKEND_URL` environment variable in your project settings.
