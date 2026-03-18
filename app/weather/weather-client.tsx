@@ -79,25 +79,29 @@ export default function WeatherClient() {
   };
 
   return (
-    <div className="min-h-screen bg-[#A1E3F9] py-20 px-4">
+    <div className="min-h-screen bg-[#A1E3F9] py-10 sm:py-16 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-[#003285] mb-2">Vayu</h1>
-          <p className="text-[#003285]">Real-time Weather Information</p>
+          <h1 className="text-3xl sm:text-4xl font-bold text-[#003285] mb-2">
+            Vayu
+          </h1>
+          <p className="text-sm sm:text-base text-[#003285]">
+            Real-time Weather Information
+          </p>
         </div>
 
-        <form onSubmit={handleSearch} className="mb-20">
-          <div className="flex gap-6">
+        <form onSubmit={handleSearch} className="mb-10 sm:mb-16">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-6">
             <input
               type="text"
               value={searchCity}
               onChange={(e) => setSearchCity(e.target.value)}
               placeholder="Search another city..."
-              className="flex-1 px-6 py-3 rounded-full text-lg bg-white/95 backdrop-blur-sm border-2 border-white/50 focus:outline-none focus:border-white shadow-lg placeholder-zinc-500 text-black"
+              className="flex-1 px-5 sm:px-6 py-3 sm:py-3.5 rounded-full text-base sm:text-lg bg-white/95 backdrop-blur-sm border-2 border-white/50 focus:outline-none focus:border-white shadow-lg placeholder-zinc-500 text-black"
             />
             <button
               type="submit"
-              className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition-colors shadow-lg"
+              className="px-6 sm:px-8 py-3 sm:py-3.5 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition-colors shadow-lg"
             >
               Search
             </button>
@@ -118,63 +122,75 @@ export default function WeatherClient() {
         )}
 
         {weather && !isLoading && (
-          <div className="space-y-10">
-            <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-2xl">
-              <div className="text-center mb-6">
-                <h2 className="text-4xl font-bold text-zinc-800">
+          <div className="space-y-6 sm:space-y-10">
+            <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-6 sm:p-8 shadow-2xl">
+              <div className="text-center mb-5 sm:mb-6">
+                <h2 className="text-3xl sm:text-4xl font-bold text-zinc-800">
                   {weather.location.name}
                 </h2>
-                <p className="text-xl text-zinc-600">
+                <p className="text-base sm:text-xl text-zinc-600">
                   {weather.location.region}, {weather.location.country}
                 </p>
               </div>
 
-              <div className="text-center mb-8">
-                <div className="text-7xl font-bold text-blue-600 mb-2">
+              <div className="text-center mb-2 sm:mb-4">
+                <div className="text-6xl sm:text-7xl font-bold text-blue-600 mb-2">
                   {Math.round(weather.current.temp_c)}°C
                 </div>
-                <div className="text-2xl text-zinc-600">
+                <div className="text-xl sm:text-2xl text-zinc-600">
                   {Math.round(weather.current.temp_f)}°F
                 </div>
-                <div className="flex items-center justify-center gap-4 mt-4">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mt-4">
                   {weather.current.condition.icon && (
                     <img
                       src={
-                        weather.current.condition.icon.startsWith("//")
-                          ? `https:${weather.current.condition.icon}`
-                          : weather.current.condition.icon
+                        "https:" + weather.current.condition.icon
                       }
                       alt={weather.current.condition.text}
                       className="w-16 h-16"
                     />
                   )}
-                  <div className="text-2xl text-zinc-700 font-medium">
+                  <div className="text-xl sm:text-2xl text-zinc-700 font-medium">
                     {weather.current.condition.text}
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 shadow-2xl">
-              <h3 className="text-2xl font-bold text-zinc-800 mb-6">
+            <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-6 sm:p-8 shadow-2xl">
+              <h3 className="text-xl sm:text-2xl font-bold text-zinc-800 mb-5 sm:mb-6">
                 Air Quality
               </h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-[#f9f8d4] rounded-xl p-6">
-                  <div className="text-sm text-zinc-600 mb-1">PM2.5</div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                <div className="bg-[#f9f8d4] rounded-xl p-5 sm:p-6">
+                  <div className="text-sm text-zinc-600 mb-1">
+                    PM2.5
+                  </div>
                   <div className="text-3xl font-bold text-zinc-800 mb-2">
                     {weather.current.air_quality.pm2_5.toFixed(1)}
                   </div>
                   <div
-                    className={`text-lg font-semibold ${getAQILevel(weather.current.air_quality.pm2_5).color}`}
+                    className={`text-sm font-medium ${
+                      weather.current.air_quality.pm2_5 <= 12
+                        ? "text-green-600"
+                        : weather.current.air_quality.pm2_5 <= 35
+                        ? "text-yellow-600"
+                        : "text-red-600"
+                    }`}
                   >
-                    {getAQILevel(weather.current.air_quality.pm2_5).level}
+                    {weather.current.air_quality.pm2_5 <= 12
+                      ? "Good"
+                      : weather.current.air_quality.pm2_5 <= 35
+                      ? "Moderate"
+                      : "Unhealthy"}
                   </div>
                 </div>
 
-                <div className="bg-[#f9f8d4] rounded-xl p-6">
-                  <div className="text-sm text-zinc-600 mb-1">PM10</div>
+                <div className="bg-[#f9f8d4] rounded-xl p-5 sm:p-6">
+                  <div className="text-sm text-zinc-600 mb-1">
+                    PM10
+                  </div>
                   <div className="text-3xl font-bold text-zinc-800">
                     {weather.current.air_quality.pm10.toFixed(1)}
                   </div>
@@ -182,7 +198,7 @@ export default function WeatherClient() {
               </div>
             </div>
 
-            <div className="flex justify-center mt-20">
+            <div className="flex justify-center mt-10 sm:mt-16">
               <button
                 onClick={() => router.push("/home")}
                 className="px-8 py-3 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition-colors shadow-lg flex items-center justify-center gap-2"
@@ -207,8 +223,8 @@ export default function WeatherClient() {
         )}
 
         {!weather && !isLoading && !error && (
-          <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-12 shadow-2xl text-center">
-            <p className="text-xl text-zinc-600">
+          <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-8 sm:p-12 shadow-2xl text-center">
+            <p className="text-base sm:text-xl text-zinc-600">
               Search for a city to see weather information
             </p>
           </div>
