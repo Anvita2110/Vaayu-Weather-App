@@ -39,6 +39,19 @@ export default function WeatherClient() {
 
   const [searchCity, setSearchCity] = useState("");
 
+  const addToRecentSearches = (nextCity: string) => {
+    const trimmed = nextCity.trim();
+    if (!trimmed) return;
+
+    const saved = localStorage.getItem("recentSearches");
+    const existing: string[] = saved ? JSON.parse(saved) : [];
+    const updated = [trimmed, ...existing.filter((c) => c !== trimmed)].slice(
+      0,
+      5
+    );
+    localStorage.setItem("recentSearches", JSON.stringify(updated));
+  };
+
   const { data: weather, error, isLoading } = useSWR<WeatherData>(
     city ? [`${BACKEND_URL}/weather/current`, city] : null,
     ([url, cityName]: [string, string]) => fetcher(url, cityName),
@@ -51,6 +64,7 @@ export default function WeatherClient() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchCity.trim()) {
+      addToRecentSearches(searchCity);
       router.push(`/weather?city=${encodeURIComponent(searchCity)}`);
     }
   };

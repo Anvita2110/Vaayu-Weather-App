@@ -1,21 +1,21 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 const POPULAR_CITIES = ["India", "New York", "Tokyo", "Switzerland", "Sydney", "Dubai", "Peru", "Egypt", "Italy"];
 
 export default function HomePage() {
   const [city, setCity] = useState("");
-  const [recentSearches, setRecentSearches] = useState<string[]>([]);
-  const router = useRouter();
-
-  useEffect(() => {
-    const saved = localStorage.getItem("recentSearches");
-    if (saved) {
-      setRecentSearches(JSON.parse(saved));
+  const [recentSearches, setRecentSearches] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem("recentSearches");
+      return saved ? (JSON.parse(saved) as string[]) : [];
+    } catch {
+      return [];
     }
-  }, []);
+  });
+  const router = useRouter();
 
   const handleSearch = (searchCity: string) => {
     if (!searchCity.trim()) return;
